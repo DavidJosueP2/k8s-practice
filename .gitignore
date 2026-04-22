@@ -1,0 +1,65 @@
+# Node / NestJS
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor
+.idea/
+.vscode/
+
+# Temp/runtime artifacts
+*.pid
+*.pid.lock
+*.seed
+*.tmp
+*.temp
+
+# --- Kubernetes / Docker local artifacts ---
+
+# Local override values (Helm)
+**/values.local.yaml
+**/values.local.yml
+**/values.override.yaml
+**/values.override.yml
+
+# Local kube config dumps or copied configs
+kubeconfig*
+*.kubeconfig
+
+# Generated templates/output
+**/rendered/
+**/manifests.generated.yaml
+**/*.generated.yaml
+
+# Secrets and private cert material
+**/*secret*.yaml
+**/*secret*.yml
+**/secrets/*.yaml
+**/secrets/*.yml
+**/*.key
+**/*.pem
+**/*.p12
+**/*.crt
+
+# Allow sample/template files for sharing
+!**/*secret*.example.yaml
+!**/*secret*.example.yml
+!**/secrets/*.example.yaml
+!**/secrets/*.example.yml

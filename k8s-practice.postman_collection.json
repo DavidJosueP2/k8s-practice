@@ -1,0 +1,182 @@
+{
+  "info": {
+    "_postman_id": "9b8da0fd-75fe-47f6-9d7b-90cd8e9a5dcb",
+    "name": "k8s-practice microservices",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Coleccion para probar inventory-service y order-service"
+  },
+  "item": [
+    {
+      "name": "Inventory Service",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventory_base_url}}/health",
+              "host": [
+                "{{inventory_base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventory_base_url}}/metrics",
+              "host": [
+                "{{inventory_base_url}}"
+              ],
+              "path": [
+                "metrics"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventory_base_url}}/inventory",
+              "host": [
+                "{{inventory_base_url}}"
+              ],
+              "path": [
+                "inventory"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventory_base_url}}/inventory/{{product_id}}",
+              "host": [
+                "{{inventory_base_url}}"
+              ],
+              "path": [
+                "inventory",
+                "{{product_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reserve Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": {{product_id}},\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{inventory_base_url}}/inventory/reserve",
+              "host": [
+                "{{inventory_base_url}}"
+              ],
+              "path": [
+                "inventory",
+                "reserve"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Order Service",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{order_base_url}}/health",
+              "host": [
+                "{{order_base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{order_base_url}}/metrics",
+              "host": [
+                "{{order_base_url}}"
+              ],
+              "path": [
+                "metrics"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": {{product_id}},\n  \"quantity\": 1\n}"
+            },
+            "url": {
+              "raw": "{{order_base_url}}/orders",
+              "host": [
+                "{{order_base_url}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "inventory_base_url",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "order_base_url",
+      "value": "http://localhost:3002"
+    },
+    {
+      "key": "product_id",
+      "value": "1"
+    }
+  ]
+}
