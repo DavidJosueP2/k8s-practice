@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace/namespace.yaml
+  - secrets/grafana-secret.yaml
+  - secrets/inventory-secret.yaml
+  - secrets/order-secret.yaml
+  - redis/deployment.yaml
+  - redis/service.yaml
+  - inventory/configmap.yaml
+  - inventory/deployment.yaml
+  - inventory/service.yaml
+  - order/configmap.yaml
+  - order/deployment.yaml
+  - order/service.yaml
+  - prometheus/configmap.yaml
+  - prometheus/deployment.yaml
+  - prometheus/service.yaml
+  - grafana/datasource-configmap.yaml
+  - grafana/deployment.yaml
+  - grafana/service.yaml

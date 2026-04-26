@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { OrderResponse } from '../interfaces/order-response.interface';
@@ -6,9 +6,15 @@ import { InventoryClientService } from './inventory-client.service';
 
 @Injectable()
 export class OrdersService {
+  private readonly logger = new Logger(OrdersService.name);
+
   constructor(private readonly inventoryClient: InventoryClientService) {}
 
   async createOrder(dto: CreateOrderDto): Promise<OrderResponse> {
+    this.logger.log(
+      `Order requested: product=${dto.productId}, quantity=${dto.quantity}.`,
+    );
+
     const reservation = await this.inventoryClient.reserveStock(
       dto.productId,
       dto.quantity,
@@ -17,6 +23,8 @@ export class OrdersService {
     const orderId = this.generateOrderId();
 
     if (reservation.status === 'APPROVED') {
+      this.logger.log(`Order confirmed: ${orderId}.`);
+
       return {
         orderId,
         productId: dto.productId,
@@ -26,6 +34,8 @@ export class OrdersService {
         timestamp: new Date().toISOString(),
       };
     }
+
+    this.logger.warn(`Order rejected: ${orderId}.`);
 
     throw new ConflictException({
       orderId,
