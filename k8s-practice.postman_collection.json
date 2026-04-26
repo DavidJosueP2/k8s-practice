@@ -26,6 +26,22 @@
           }
         },
         {
+          "name": "Secret Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventory_base_url}}/secret-demo",
+              "host": [
+                "{{inventory_base_url}}"
+              ],
+              "path": [
+                "secret-demo"
+              ]
+            }
+          }
+        },
+        {
           "name": "Metrics",
           "request": {
             "method": "GET",
@@ -122,6 +138,22 @@
           }
         },
         {
+          "name": "Secret Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{order_base_url}}/secret-demo",
+              "host": [
+                "{{order_base_url}}"
+              ],
+              "path": [
+                "secret-demo"
+              ]
+            }
+          }
+        },
+        {
           "name": "Metrics",
           "request": {
             "method": "GET",
@@ -133,6 +165,23 @@
               ],
               "path": [
                 "metrics"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Orders Demo Payload",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{order_base_url}}/orders/demo",
+              "host": [
+                "{{order_base_url}}"
+              ],
+              "path": [
+                "orders",
+                "demo"
               ]
             }
           }
@@ -172,7 +221,7 @@
     },
     {
       "key": "order_base_url",
-      "value": "http://localhost:3002"
+      "value": "http://localhost:30080"
     },
     {
       "key": "product_id",
