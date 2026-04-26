@@ -32,6 +32,8 @@ export class InventoryService implements OnModuleInit {
   }
 
   async getAllProducts(): Promise<Product[]> {
+    this.logger.log('Inventory list requested.');
+
     const keys: string[] = [];
     let cursor = '0';
 
@@ -78,9 +80,12 @@ export class InventoryService implements OnModuleInit {
   }
 
   async getProductById(id: number): Promise<Product> {
+    this.logger.log(`Product requested: ${id}.`);
+
     const hash = await this.redis.hgetall(this.getProductKey(id));
 
     if (Object.keys(hash).length === 0) {
+      this.logger.warn(`Product not found: ${id}.`);
       throw new NotFoundException({ message: `Product ${id} not found.` });
     }
 
@@ -88,6 +93,10 @@ export class InventoryService implements OnModuleInit {
   }
 
   async reserveStock(dto: ReserveStockDto): Promise<ReserveStockResponse> {
+    this.logger.log(
+      `Stock reservation requested: product=${dto.productId}, quantity=${dto.quantity}.`,
+    );
+
     const productKey = this.getProductKey(dto.productId);
 
     for (let attempt = 1; attempt <= 5; attempt += 1) {
@@ -96,6 +105,7 @@ export class InventoryService implements OnModuleInit {
 
       if (Object.keys(hash).length === 0) {
         await this.redis.unwatch();
+        this.logger.warn(`Product not found: ${dto.productId}.`);
         throw new NotFoundException({
           message: `Product ${dto.productId} not found.`,
         });
@@ -105,6 +115,9 @@ export class InventoryService implements OnModuleInit {
 
       if (availableStock < dto.quantity) {
         await this.redis.unwatch();
+        this.logger.warn(
+          `Stock reservation rejected: product=${dto.productId}, available=${availableStock}.`,
+        );
         return this.buildReservationResponse(
           dto.productId,
           dto.quantity,
@@ -121,6 +134,9 @@ export class InventoryService implements OnModuleInit {
         .exec();
 
       if (txResult !== null) {
+        this.logger.log(
+          `Stock reserved: product=${dto.productId}, remaining=${remainingStock}.`,
+        );
         return this.buildReservationResponse(
           dto.productId,
           dto.quantity,

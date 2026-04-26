@@ -1,19 +1,25 @@
-import { BadGatewayException, Injectable } from '@nestjs/common';
+import { BadGatewayException, Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { InventoryReserveResponse } from '../interfaces/inventory-reserve-response.interface';
 
 @Injectable()
 export class InventoryClientService {
+  private readonly logger = new Logger(InventoryClientService.name);
   private readonly axiosClient: AxiosInstance;
 
   constructor() {
+    const baseURL =
+      process.env.INVENTORY_SERVICE_URL ?? 'http://localhost:3001';
+
     this.axiosClient = axios.create({
-      baseURL: process.env.INVENTORY_SERVICE_URL ?? 'http://localhost:3001',
+      baseURL,
       timeout: 3000,
       headers: {
         'Content-Type': 'application/json',
       },
     });
+
+    this.logger.log(`Inventory target configured: ${baseURL}.`);
   }
 
   async reserveStock(
@@ -21,6 +27,10 @@ export class InventoryClientService {
     quantity: number,
   ): Promise<InventoryReserveResponse> {
     try {
+      this.logger.log(
+        `Calling inventory-service: product=${productId}, quantity=${quantity}.`,
+      );
+
       const response = await this.axiosClient.post<InventoryReserveResponse>(
         '/inventory/reserve',
         {
@@ -29,11 +39,15 @@ export class InventoryClientService {
         },
       );
 
+      this.logger.log(`Inventory replied: ${response.data.status}.`);
       return response.data;
     } catch (error) {
+      const details = this.describeAxiosError(error);
+      this.logger.error(`Inventory call failed: ${details}.`);
+
       throw new BadGatewayException({
         message: 'Failed to communicate with inventory-service.',
-        details: this.describeAxiosError(error),
+        details,
       });
     }
   }
